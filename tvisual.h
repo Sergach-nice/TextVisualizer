@@ -41,14 +41,14 @@ private:
     uint8_t **block;/// for conversion
     int size;
     std::string cset;
-    char GetCharFormBlock();
+    char GetCharFormBlock();          /// converts size*size pixels -> 1 symbol
     uint8_t format(sf::Color &pixel); /// rgb to 0...255
 
 public:
     PIXBLOCK(int sz, std::string char_set);
     ~PIXBLOCK();
     void clear();
-    std::string GenerateBlock(sf::Image src); /// convert size*size pixels -> 1 symbol
+    std::string GenerateBlock(sf::Image src); /// image -> ([block with pixels]->symbol)*height*width -> text 
 
 
 };
@@ -76,7 +76,7 @@ private:
 
     inline void v_decode(const char* VideoToDecode); ///.mp4 to .png   {1}    ?inline :)
     inline void v_encode(const char* VideoToEncode); ///.png to .mp4   {4}
-    std::string ReadTextFile(const char* file);      /// all stuff from file
+    std::string ReadTextFile(const char* file);      /// reads all stuff from file
     bool file_exist(const char* file);
     bool dir_exist(const char* dir);
     unsigned folder_size(const char* path);
