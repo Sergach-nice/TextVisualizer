@@ -20,13 +20,13 @@ int main(){
         //settings.antialiasingLevel = 8; //?????????
 
         sf::RenderWindow window(sf::VideoMode(1400, 1000), "Frame", sf::Style::Resize, settings);
-                                                                            //play with this settings
+                                                 //play with this settings
         sf::View view = window.getDefaultView(); //
-        view.setSize(1400, 760*2);                        //
-        view.move(-10, 220);                                 //
-        window.setView(view);                             //
+        view.setSize(1400, 760*2);               //
+        view.move(-10, 220);                     //
+        window.setView(view);                    //
 
-                                                                                            //8 3 :)
+                                                 //       8, 3 :)
         if(!visual->ConvertVideo(InVideo, VName, window, 10, 3, sf::Color::Black, sf::Color::White, CHAR_SET_RE))std::cout << vis::DecodeError(visual->GetStatus());
         window.close();
     }else std::cout << vis::DecodeError(visual->GetStatus());
