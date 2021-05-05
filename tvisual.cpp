@@ -101,14 +101,46 @@ bool vis::Visualizer::ConvertVideo(const char* VideoPath, const char* OutputVide
             std::cout << " encoding...";
             v_encode((DataBase + '\\' + OutputName).c_str());
             std::cout  << " encoding :ok" << std::endl;
-        }else { std::cout << GetStatus(); return false;}
-    }else { std::cout << GetStatus(); return false;}
+        }else return false;
+    }else return false;
 
     return status(vis::status::success, 1);
 }
 
 int vis::Visualizer::GetStatus(){ return v_status; }
+bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set){
+    v_text = sf::Text("", v_font, text_size);
+    v_text.setColor(TextColor);
+    v_BackGround = BackGround;
+    this->wnd = &wnd;
+    v_char_set = c_set;
+    if(v_status != vis::status::success)return false;
+    if(block_size > 0)v_blocksize = block_size;
+    else v_blocksize = 1;
+    std::cout << VideoPath;
+    if(!file_exist(VideoPath)){ return status(vis::status::bad_file);}
+    this->VideoPath = VideoPath;
 
+    std::cout << "decoding... ";
+    v_decode(this->VideoPath.c_str());
+
+    std::cout <<  " \"" << OUTPUT_TEXT_FORMAT<< "\" raw text folder  ";
+    return present_as_text();
+} 
+bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, sf::Color BackGround, sf::Color TextColor){
+    v_text = sf::Text("", v_font, text_size);
+    v_text.setColor(TextColor);
+    v_BackGround = BackGround;
+    this->wnd = &wnd;
+    if(strlen(OutputVideoName) == 0)OutputName = "default";
+    else OutputName = OutputVideoName;
+    if(present_as_image(wnd)){
+        std::cout << " encoding...";
+        v_encode((DataBase + '\\' + OutputName).c_str());
+        std::cout  << " encoding :ok" << std::endl;
+    }else return false;
+    return status(vis::status::success, 1);
+} 
 
 //      PRIVATE: *********************************************************************************************************
 
