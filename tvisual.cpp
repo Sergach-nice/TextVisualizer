@@ -73,41 +73,12 @@ vis::Visualizer::~Visualizer(){
 }
 
 bool vis::Visualizer::ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char*c_set){
-
-    v_text = sf::Text("", v_font, text_size);
-    v_text.setColor(TextColor);
-    v_BackGround = BackGround;
-    this->wnd = &wnd;
-    v_char_set = c_set;
-    if(v_status != vis::status::success)return false;
-    if(block_size > 0)v_blocksize = block_size;
-    else v_blocksize = 1;
-    std::cout << VideoPath;
-    if(!file_exist(VideoPath)){ return status(vis::status::bad_file);}
-    this->VideoPath = VideoPath;
-
-    if(strlen(OutputVideoName) == 0)OutputName = "default";
-    else OutputName = OutputVideoName;
-    std::cout << "decoding... ";
-    v_decode(this->VideoPath.c_str());
-
-    std::cout << " decoding :ok\n";
-    std::cout <<  " \"" << OUTPUT_TEXT_FORMAT<< "\" raw text folder  ";
-
-    if(present_as_text()){
-        std::cout  << ":ok" << std::endl;
-        std::cout << " \"" << OUTPUT_IMAGE_FORMAT<< "\" video idata  \n" ;
-        if(present_as_image(wnd)){
-            std::cout << " encoding...";
-            v_encode((DataBase + '\\' + OutputName).c_str());
-            std::cout  << " encoding :ok" << std::endl;
-        }else return false;
-    }else return false;
-
-    return status(vis::status::success, 1);
+    if(Visualization(VideoPath, wnd, text_size, block_size, BackGround, TextColor, c_set)) return toVideo(OutputVideoName, wnd, text_size, BackGround, TextColor);
+    else return false;
 }
 
 int vis::Visualizer::GetStatus(){ return v_status; }
+
 bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set){
     v_text = sf::Text("", v_font, text_size);
     v_text.setColor(TextColor);
@@ -117,16 +88,14 @@ bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd
     if(v_status != vis::status::success)return false;
     if(block_size > 0)v_blocksize = block_size;
     else v_blocksize = 1;
-    std::cout << VideoPath;
+    std::cout << VideoPath << std::endl;
     if(!file_exist(VideoPath)){ return status(vis::status::bad_file);}
     this->VideoPath = VideoPath;
 
     std::cout << "decoding... ";
     v_decode(this->VideoPath.c_str());
-
-    std::cout <<  " \"" << OUTPUT_TEXT_FORMAT<< "\" raw text folder  ";
     return present_as_text();
-} 
+}
 bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, sf::Color BackGround, sf::Color TextColor){
     v_text = sf::Text("", v_font, text_size);
     v_text.setColor(TextColor);
@@ -135,12 +104,11 @@ bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd
     if(strlen(OutputVideoName) == 0)OutputName = "default";
     else OutputName = OutputVideoName;
     if(present_as_image(wnd)){
-        std::cout << " encoding...";
+        std::cout << " encoding...\n";
         v_encode((DataBase + '\\' + OutputName).c_str());
-        std::cout  << " encoding :ok" << std::endl;
     }else return false;
     return status(vis::status::success, 1);
-} 
+}
 
 //      PRIVATE: *********************************************************************************************************
 
@@ -234,6 +202,7 @@ unsigned vis::Visualizer::folder_size(const char* path){
 }
 
 bool vis::Visualizer::present_as_text(){
+    std::cout <<  " \"" << OUTPUT_TEXT_FORMAT<< "\" raw text folder  ";
     if(v_status != vis::status::success)return false;
     wnd->pollEvent(v_event);
     v_status = vis::status::progress;
@@ -265,12 +234,15 @@ bool vis::Visualizer::present_as_text(){
         counter++;
 
     }
-    system("cls");
     delete pixel_block;
+    std::cout  << ":ok" << std::endl;
+    wnd->clear(v_BackGround);
+    wnd->display();
     return status(vis::status::success, 1);
 }
 
 bool vis::Visualizer::present_as_image(sf::RenderWindow &wnd){
+    std::cout << " \"" << OUTPUT_IMAGE_FORMAT<< "\" video idata  " ;
     if(v_status != vis::status::success)return false;
     wnd.pollEvent(v_event);
     v_status = vis::status::progress;
@@ -294,8 +266,10 @@ bool vis::Visualizer::present_as_image(sf::RenderWindow &wnd){
 
         img.saveToFile(image_path);
         counter++;
-
     }
+    std::cout << ":ok";
+    wnd.clear(v_BackGround);
+    wnd.display();
     return status(vis::status::success, 1);
 }
 
