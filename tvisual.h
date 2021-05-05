@@ -97,7 +97,7 @@ public:
     /// Saves result of visualization i "RTF" 
     bool Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
     /// convert RTF to video
-    bool toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, sf::Color BackGround, sf::Color TextColor);
+    bool toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, sf::Color BackGround, sf::Color TextColor);
 };
 
 
