@@ -48,7 +48,7 @@ public:
     PIXBLOCK(int sz, std::string char_set);
     ~PIXBLOCK();
     void clear();
-    std::string GenerateBlock(sf::Image src); /// image -> ([block with pixels]->symbol)*height*width -> text 
+    std::string GenerateBlock(sf::Image src); /// image -> ([block with pixels]->symbol)*height*width -> text
 
 
 };
@@ -94,7 +94,7 @@ public:
     bool ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
     ///(vis::status)
     int GetStatus();
-    /// Saves result of visualization i "RTF" 
+    /// Saves result of visualization i "RTF"
     bool Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
     /// convert RTF to video
     bool toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, sf::Color BackGround, sf::Color TextColor);
