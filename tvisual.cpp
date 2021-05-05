@@ -127,7 +127,7 @@ bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd
     std::cout <<  " \"" << OUTPUT_TEXT_FORMAT<< "\" raw text folder  ";
     return present_as_text();
 } 
-bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, sf::Color BackGround, sf::Color TextColor){
+bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, sf::Color BackGround, sf::Color TextColor){
     v_text = sf::Text("", v_font, text_size);
     v_text.setColor(TextColor);
     v_BackGround = BackGround;
