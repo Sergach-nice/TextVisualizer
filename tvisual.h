@@ -17,6 +17,7 @@
 #define VIDEO_IDATA "\\VID"
 #define TEXT_IDATA "\\TID"
 #define TEXT_FOLDER "\\RTF"
+#define VIDEO_ENCODER_STEPS "0.40" ///   vis::Visualizer::v_encode  ffmpeg command  "[0:v]setpts=0.40*PTS[v];[0:a]atempo=1[a]
 #define FFMPEG_FOLDER "ffmpeg"  /// as for me, i already installed it in main folder ( i have used it for CMD )
                                                            /// https://blog.pruffme.com/instrukciya-po-ustanovke-i-rabote-s-programmoj-ffmpeg-na-windows/
 //********************************************************************************
