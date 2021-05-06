@@ -154,7 +154,7 @@ inline void vis::Visualizer::v_encode(const char* VideoToEncode){
     command += " -i ";
     command += VideoDataPath +"\\OLDN";
     command += OUTPUT_VIDEO_FORMAT;
-    command += " -filter_complex \"[0:v]setpts="
+    command += " -filter_complex \"[0:v]setpts=";
     command += VIDEO_ENCODER_STEPS;
     command += "*PTS[v];[0:a]atempo=1[a]\" -map \"[v]\" -map \"[a]\" ";
     command += VideoToEncode;
