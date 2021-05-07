@@ -26,8 +26,8 @@ int main(){
         view.move(-10, 220);                     //
         window.setView(view);                    //
 
-                                                 //       8, 3 :)
-        if(!visual->ConvertVideo(InVideo, VName, window, 10, 3, sf::Color::Black, sf::Color::White, CHAR_SET_RE))std::cout << vis::DecodeError(visual->GetStatus());
+                                                 //       3, 8 :)
+        if(!visual->ConvertVideo(InVideo, VName, window, 3, 10, sf::Color::Black, sf::Color::White, CHAR_SET_RE))std::cout << vis::DecodeError(visual->GetStatus());
         window.close();
     }else std::cout << vis::DecodeError(visual->GetStatus());
 
