@@ -72,14 +72,14 @@ vis::Visualizer::~Visualizer(){
 
 }
 
-bool vis::Visualizer::ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char*c_set){
+bool vis::Visualizer::ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned block_size, unsigned text_size, sf::Color BackGround, sf::Color TextColor, const char*c_set){
     if(Visualization(VideoPath, wnd, text_size, block_size, BackGround, TextColor, c_set)) return toVideo(OutputVideoName, wnd, text_size, BackGround, TextColor);
     else return false;
 }
 
 int vis::Visualizer::GetStatus(){ return v_status; }
 
-bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set){
+bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned block_size, unsigned text_size, sf::Color BackGround, sf::Color TextColor, const char* c_set){
     v_text = sf::Text("", v_font, text_size);
     v_text.setColor(TextColor);
     v_BackGround = BackGround;
