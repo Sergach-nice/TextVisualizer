@@ -92,11 +92,11 @@ public:
     Visualizer(const char* VideoDataBase, sf::Font Font, bool delete_src_directories = 0);
     ~Visualizer();
     ///              (in Video,                                out Name!,                Window,   text (font size), pixel_block_to_symbol_size, FrameBackGround,         TextColor,      char_set!!!!)
-    bool ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
+    bool ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned block_size, unsigned text_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
     ///(vis::status)
     int GetStatus();
     /// Saves result of visualization i "RTF"
-    bool Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned text_size, unsigned block_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
+    bool Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned block_size, unsigned text_size, sf::Color BackGround, sf::Color TextColor, const char* c_set);
     /// convert RTF to video
     bool toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned text_size, sf::Color BackGround, sf::Color TextColor);
 };
