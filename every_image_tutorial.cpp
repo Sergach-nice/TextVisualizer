@@ -17,7 +17,6 @@ void ImageLikeText(sf::RenderWindow &window, const char* image_path, const char*
 
     window.clear();
     window.draw(text);
-    window.display();
     window.capture().saveToFile(out_file);
     window.close();
 }
