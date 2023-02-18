@@ -1,8 +1,13 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "tvisual.h"
+#pragma comment(lib, "sfml-graphics.lib")
+#pragma comment(lib, "sfml-window.lib")
+#pragma comment(lib, "sfml-main.lib")
+#pragma comment(lib, "sfml-system.lib")
 
-#define InVideo "..."
+
+#define InVideo "your video"
 #define VName "default"
 
 int main(){
@@ -10,7 +15,7 @@ int main(){
 
     sf::Font font;
     font.loadFromFile("CourierTTBold.ttf");
-    vis::Visualizer* visual = new vis::Visualizer("D:\\TEST", font, 1);
+    vis::Visualizer* visual = new vis::Visualizer("TEST", font, 1);
 
 
     if(visual->GetStatus() == vis::status::success){
@@ -27,7 +32,7 @@ int main(){
         window.setView(view);                    //
 
                                                  //       3, 8 :)
-        if(!visual->ConvertVideo(InVideo, VName, window, 3, 10, sf::Color::Black, sf::Color::White, CHAR_SET_RE))std::cout << vis::DecodeError(visual->GetStatus());
+        if(!visual->ConvertVideo(InVideo, VName, window, 20, 10, sf::Color::Black, sf::Color::White, CHAR_SET_RE))std::cout << vis::DecodeError(visual->GetStatus());
         window.close();
     }else std::cout << vis::DecodeError(visual->GetStatus());
 

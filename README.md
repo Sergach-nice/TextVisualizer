@@ -1,10 +1,20 @@
 # TextVisualizer
 Simple class : convert your video in text video!
-1) Install ffmpeg (exe) files
-2) Rewrite ffmpeg path in definition tvisual.h
-3) Install sfml & include into your project
-4) Read all marks in tvisual.h to understand functional.
-5) Done!
+
+Visual studio project configuration for x64 release version.
+copy SFML\bin files to to your exe file after compilation.
+
+SFML should be in project directory
+SFML/include
+SFML/lib
+SFML/bin
+
+(example) in every_image_tutorial.cpp
+
+1) Read all marks in tvisual.h to understand functional.
+2) ffmpeg (exe) files needed!
+3) sfml instalation needed!
+4) Done!
 
 [FUNCS]
 

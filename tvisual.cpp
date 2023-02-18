@@ -73,15 +73,16 @@ vis::Visualizer::~Visualizer(){
 }
 
 bool vis::Visualizer::ConvertVideo(const char* VideoPath, const char* OutputVideoName, sf::RenderWindow &wnd, unsigned block_size, unsigned font_size, sf::Color BackGround, sf::Color TextColor, const char*c_set){
-    if(Visualization(VideoPath, wnd, text_size, block_size, BackGround, TextColor, c_set)) return toVideo(OutputVideoName, wnd, text_size, BackGround, TextColor);
+    if(Visualization(VideoPath, wnd, font_size, block_size, BackGround, TextColor, c_set)) return toVideo(OutputVideoName, wnd, font_size, BackGround, TextColor);
     else return false;
 }
 
 int vis::Visualizer::GetStatus(){ return v_status; }
 
 bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd, unsigned block_size, unsigned font_size, sf::Color BackGround, sf::Color TextColor, const char* c_set){
-    v_text = sf::Text("", v_font, text_size);
-    v_text.setColor(TextColor);
+    v_text = sf::Text("", v_font, font_size);
+    //v_text.setColor(TextColor); deprecated
+    v_text.setFillColor(TextColor);
     v_BackGround = BackGround;
     this->wnd = &wnd;
     v_char_set = c_set;
@@ -97,8 +98,9 @@ bool vis::Visualizer::Visualization(const char* VideoPath, sf::RenderWindow &wnd
     return present_as_text();
 }
 bool vis::Visualizer::toVideo(const char* OutputVideoName, sf::RenderWindow &wnd, unsigned font_size, sf::Color BackGround, sf::Color TextColor){
-    v_text = sf::Text("", v_font, text_size);
-    v_text.setColor(TextColor);
+    v_text = sf::Text("", v_font, font_size);
+    //v_text.setColor(TextColor); deprecated
+    v_text.setFillColor(TextColor);
     v_BackGround = BackGround;
     this->wnd = &wnd;
     if(strlen(OutputVideoName) == 0)OutputName = "default";
@@ -190,12 +192,12 @@ unsigned vis::Visualizer::folder_size(const char* path){
     std::string mpath = path;
     mpath += "\\*";
     unsigned counter = 0;
-    WIN32_FIND_DATA ffd;
+    WIN32_FIND_DATAA ffd;
 
-    HANDLE hFind = FindFirstFileA (mpath.c_str(), &ffd);
+    HANDLE hFind = FindFirstFileA(mpath.c_str(), &ffd);
     if (hFind != INVALID_HANDLE_VALUE){
         if(strcmp(ffd.cFileName, ".") && strcmp(ffd.cFileName, "..")) counter++;
-        while (FindNextFile(hFind, &ffd)){
+        while (FindNextFileA(hFind, &ffd)){
             if(strcmp(ffd.cFileName, ".") && strcmp(ffd.cFileName, ".."))counter++;
         }
         FindClose(hFind);
@@ -244,7 +246,7 @@ bool vis::Visualizer::present_as_text(){
 }
 
 bool vis::Visualizer::present_as_image(sf::RenderWindow &wnd){
-    std::cout << " \"" << OUTPUT_IMAGE_FORMAT<< "\" video idata  " ;
+    std::cout << " \"" << OUTPUT_IMAGE_FORMAT << "\" video idata  " ;
     if(v_status != vis::status::success)return false;
     wnd.pollEvent(v_event);
     v_status = vis::status::progress;
@@ -263,7 +265,11 @@ bool vis::Visualizer::present_as_image(sf::RenderWindow &wnd){
         wnd.clear(v_BackGround);
         wnd.draw(v_text);
         wnd.display();
-        texture.loadFromImage(wnd.capture());
+
+       
+#pragma warning(disable:4996)  // i need .capture(), sorry sfml
+        texture.loadFromImage(wnd.capture()); //wnd.capture() is now deprecated
+        
         img = texture.copyToImage();
 
         img.saveToFile(image_path);
@@ -284,76 +290,76 @@ void vis::Visualizer::rdir(std::string directory){
 
 //   PIXBLOCK   PUBLIC: *********************************************************************************************************
 
-    vis::PIXBLOCK::PIXBLOCK(int sz, std::string char_set){
-        size = sz*2;
-        cset = char_set;
-        if(cset.empty())cset = " .-~oO@";
-        block = new uint8_t*[size];
-        for(int i = 0; i < size; i++){
-            block[i] = new  uint8_t[size];
-            for(int g = 0; g < size; g++) block[i][g] = 0;
-        }
-    }
-
-     vis::PIXBLOCK::~PIXBLOCK(){
-        for(int i = 0; i < size; i++)delete [] block[i];
-        delete [] block;
-    }
-
-    void  vis::PIXBLOCK::clear(){
-     for(int i = 0; i < size; i++)
+vis::PIXBLOCK::PIXBLOCK(int sz, std::string char_set){
+    size = sz*2;
+    cset = char_set;
+    if(cset.empty())cset = " .-~oO@";
+    block = new uint8_t*[size];
+    for(int i = 0; i < size; i++){
+        block[i] = new  uint8_t[size];
         for(int g = 0; g < size; g++) block[i][g] = 0;
     }
+}
 
-    std::string  vis::PIXBLOCK::GenerateBlock(sf::Image src){
+    vis::PIXBLOCK::~PIXBLOCK(){
+    for(int i = 0; i < size; i++)delete [] block[i];
+    delete [] block;
+}
 
-        std::string ret = "";
-        unsigned h_offset = 0;
-        unsigned w_offset = 0;
-        sf::Color cbuff;
+void  vis::PIXBLOCK::clear(){
+    for(int i = 0; i < size; i++)
+    for(int g = 0; g < size; g++) block[i][g] = 0;
+}
 
-        for(;h_offset < src.getSize().y; h_offset += size){
-            if( (h_offset + size) > src.getSize().y)h_offset -= (h_offset + size) - src.getSize().y;
+std::string  vis::PIXBLOCK::GenerateBlock(sf::Image src){
 
-            for(w_offset = 0 ;w_offset < src.getSize().x; w_offset += size){
-                if( (w_offset + size) > src.getSize().x)w_offset -= (w_offset + size) - src.getSize().x;
-                for(int sy = 0; sy < size; sy++){
-                    for(int sx = 0; sx < size; sx++){
-                        if(h_offset + sy <= src.getSize().y && w_offset + sx <= src.getSize().x){
-                        cbuff = src.getPixel(w_offset + sx, h_offset + sy);
-                        block[sy][sx] = format(cbuff);
-                        }
+    std::string ret = "";
+    unsigned h_offset = 0;
+    unsigned w_offset = 0;
+    sf::Color cbuff;
+
+    for(;h_offset < src.getSize().y; h_offset += size){
+        if( (h_offset + size) > src.getSize().y)h_offset -= (h_offset + size) - src.getSize().y;
+
+        for(w_offset = 0 ;w_offset < src.getSize().x; w_offset += size){
+            if( (w_offset + size) > src.getSize().x)w_offset -= (w_offset + size) - src.getSize().x;
+            for(int sy = 0; sy < size; sy++){
+                for(int sx = 0; sx < size; sx++){
+                    if(h_offset + sy <= src.getSize().y && w_offset + sx <= src.getSize().x){
+                    cbuff = src.getPixel(w_offset + sx, h_offset + sy);
+                    block[sy][sx] = format(cbuff);
                     }
                 }
-
-                    ret += GetCharFormBlock();
             }
-            ret += '\n';
+
+                ret += GetCharFormBlock();
         }
-        //std::cout <<ret <<std::endl;
-        //system("pause");
-        return ret;
+        ret += '\n';
     }
+    //std::cout <<ret <<std::endl;
+    //system("pause");
+    return ret;
+}
 
 
 //  PRIVATE: *********************************************************************************************************
 
-    char  vis::PIXBLOCK::GetCharFormBlock(){
-        int src = 0;
-        for(int i = 0; i < size; i++)
-            for(int g = 0; g < size; g++) src +=(int)block[i][g];
-        unsigned sz = (size*size);
-        if(sz == 0)sz = 1;
-        src = src/sz;
-        int jumper = 255/cset.size();
-        for(int i = 0; i < cset.size(); i++){
-            if((((i - 1) * jumper) <= src) && (((i + 1) * jumper) >= src))return cset.at(i);
-        }
-        return char(cset.at(cset.size()-1));
+char  vis::PIXBLOCK::GetCharFormBlock(){
+    int src = 0;
+    for(int i = 0; i < size; i++)
+        for(int g = 0; g < size; g++) src +=(int)block[i][g];
+    unsigned sz = (size*size);
+    if(sz == 0)sz = 1;
+    src = src/sz;
+    int jumper = 255/cset.size();
+    for(int i = 0; i < cset.size(); i++){
+        if((((i - 1) * jumper) <= src) && (((i + 1) * jumper) >= src))return cset.at(i);
     }
+    return char(cset.at(cset.size()-1));
+}
 
-    uint8_t  vis::PIXBLOCK::format(sf::Color &pixel){
-        return uint8_t((pixel.r + pixel.g + pixel.b)/3);
-    }
+uint8_t  vis::PIXBLOCK::format(sf::Color &pixel){
+    return uint8_t((pixel.r + pixel.g + pixel.b)/3);
+}
 
 
