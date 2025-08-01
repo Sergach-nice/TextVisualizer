@@ -1,5 +1,7 @@
 # TextVisualizer
 Simple class : convert your video in text video!
+video:
+https://www.youtube.com/watch?v=_XKPrAD6IAE
 
 Visual studio project configuration for x64 release version.
 copy SFML\bin files to to your exe file after compilation.
